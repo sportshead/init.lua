@@ -13,6 +13,8 @@ lsp_zero.on_attach(function(_, bufnr)
     vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
     vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+
+    vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
 end)
 
 lsp_zero.format_on_save({
@@ -24,12 +26,13 @@ lsp_zero.format_on_save({
         ['tsserver'] = { 'javascript', 'typescript' },
         ['gopls'] = { 'go' },
         ['lua_ls'] = { 'lua' },
+        ['google-java-format'] = { 'java', 'jsp' },
     }
 })
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = { 'tsserver', 'gopls', 'lua_ls' },
+    ensure_installed = { 'tsserver', 'gopls', 'lua_ls', 'ltex', 'emmet_language_server' },
     handlers = {
         lsp_zero.default_setup,
         lua_ls = function()
@@ -43,6 +46,20 @@ require('mason-lspconfig').setup({
                         gofumpt = true
                     }
                 }
+            })
+        end,
+        ltex = function()
+            require('lspconfig').ltex.setup({
+                settings = {
+                    ltex = {
+                        language = "en-GB"
+                    }
+                }
+            })
+        end,
+        emmet_language_server = function()
+            require('lspconfig').emmet_language_server.setup({
+                filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact", "vue" },
             })
         end,
     }
@@ -59,11 +76,32 @@ cmp.setup({
         { name = 'luasnip', keyword_length = 2 },
         { name = 'buffer',  keyword_length = 3 },
     },
-    formatting = lsp_zero.cmp_format(),
+    formatting = {
+        fields = { 'abbr', 'kind', 'menu' },
+        format = require('lspkind').cmp_format({
+            mode = 'symbol',       -- show only symbol annotations
+            maxwidth = 50,         -- prevent the popup from showing more than provided characters
+            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
+            symbol_map = { Codeium = "", }
+        })
+    },
     mapping = cmp.mapping.preset.insert({
         ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
         ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
         ['<C-y>'] = cmp.mapping.confirm({ select = true }),
         ['<C-Space>'] = cmp.mapping.complete(),
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+            if cmp.visible() then
+                local entry = cmp.get_selected_entry()
+                if not entry then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    cmp.confirm()
+                end
+            else
+                fallback()
+            end
+        end, { "i", "s", "c", }),
     }),
 })

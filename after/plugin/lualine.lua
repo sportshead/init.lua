@@ -37,7 +37,12 @@ require('lualine').setup({
             'filename',
             newfile_status = true,
             path = 1,
-        }, 'lsp_progress' },
+        }, {
+            'lsp_progress',
+            display_components = { 'lsp_client_name', 'spinner', { 'title', 'percentage', 'message' } },
+            timer = { spinner = 150, progress_enddelay = 500, lsp_client_name_enddelay = 1000 },
+            spinner_symbols = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+        } },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { {
             harpoonStatusLine,

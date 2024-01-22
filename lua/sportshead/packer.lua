@@ -18,7 +18,11 @@ return require('packer').startup(function(use)
     use({
         'folke/tokyonight.nvim',
         config = function()
-            vim.cmd [[colorscheme tokyonight]]
+            require("tokyonight").setup({
+                style = "moon",
+                transparent = true,
+            })
+            vim.cmd [[colorscheme tokyonight-moon]]
         end
     })
 
@@ -48,12 +52,17 @@ return require('packer').startup(function(use)
             { 'saadparwaiz1/cmp_luasnip' },
             { 'hrsh7th/cmp-nvim-lsp' },
             { 'hrsh7th/cmp-nvim-lua' },
+            { 'onsails/lspkind.nvim' },
 
             -- Snippets
             { 'L3MON4D3/LuaSnip' },
             { 'rafamadriz/friendly-snippets' },
+
+            -- Emmet
+            { 'olrtg/nvim-emmet' },
         }
     }
+
 
     use('tpope/vim-commentary')
 
@@ -96,4 +105,6 @@ return require('packer').startup(function(use)
             require("trouble").setup()
         end
     })
+
+    use('ThePrimeagen/vim-be-good')
 end)
