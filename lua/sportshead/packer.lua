@@ -60,9 +60,11 @@ return require('packer').startup(function(use)
 
             -- Emmet
             { 'olrtg/nvim-emmet' },
+
+            -- Formatting
+            { 'nvimtools/none-ls.nvim' },
         }
     }
-
 
     use('tpope/vim-commentary')
 
@@ -107,4 +109,11 @@ return require('packer').startup(function(use)
     })
 
     use('ThePrimeagen/vim-be-good')
+
+    use({
+        'norcalli/nvim-colorizer.lua',
+        config = function()
+            require('colorizer').setup()
+        end
+    })
 end)

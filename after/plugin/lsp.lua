@@ -17,19 +17,6 @@ lsp_zero.on_attach(function(_, bufnr)
     vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
 end)
 
-lsp_zero.format_on_save({
-    format_opts = {
-        async = false,
-        timeout_ms = 10000,
-    },
-    servers = {
-        ['tsserver'] = { 'javascript', 'typescript' },
-        ['gopls'] = { 'go' },
-        ['lua_ls'] = { 'lua' },
-        ['google-java-format'] = { 'java', 'jsp' },
-    }
-})
-
 require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = { 'tsserver', 'gopls', 'lua_ls', 'ltex', 'emmet_language_server' },
@@ -79,9 +66,9 @@ cmp.setup({
     formatting = {
         fields = { 'abbr', 'kind', 'menu' },
         format = require('lspkind').cmp_format({
-            mode = 'symbol',       -- show only symbol annotations
-            maxwidth = 50,         -- prevent the popup from showing more than provided characters
-            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
+            mode = 'symbol',           -- show only symbol annotations
+            maxwidth = 50,             -- prevent the popup from showing more than provided characters
+            ellipsis_char = '...',     -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
             symbol_map = { Codeium = "", }
         })
     },
@@ -102,6 +89,19 @@ cmp.setup({
             else
                 fallback()
             end
-        end, { "i", "s", "c", }),
+        end, { "i", "s" }),
     }),
 })
+
+local null_ls = require("null-ls")
+
+null_ls.setup({
+    sources = {
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.code_actions.shellcheck,
+        null_ls.builtins.diagnostics.shellcheck,
+        null_ls.builtins.formatting.prettierd,
+    },
+})
+
+vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
