@@ -1,4 +1,4 @@
-local lsp_zero = require('lsp-zero')
+local lsp_zero = require("lsp-zero")
 
 lsp_zero.on_attach(function(_, bufnr)
     local opts = { buffer = bufnr, remap = false }
@@ -14,69 +14,82 @@ lsp_zero.on_attach(function(_, bufnr)
     vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 
-    vim.keymap.set({ "n", "v" }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation)
+    vim.keymap.set({ "n", "v" }, "<leader>xe", require("nvim-emmet").wrap_with_abbreviation)
 end)
 
-require('mason').setup({})
-require('mason-lspconfig').setup({
-    ensure_installed = { 'tsserver', 'gopls', 'lua_ls', 'ltex', 'emmet_language_server' },
+require("mason").setup({})
+require("mason-lspconfig").setup({
+    ensure_installed = { "tsserver", "gopls", "lua_ls", "ltex", "emmet_language_server" },
     handlers = {
         lsp_zero.default_setup,
         lua_ls = function()
             local lua_opts = lsp_zero.nvim_lua_ls()
-            require('lspconfig').lua_ls.setup(lua_opts)
+            require("lspconfig").lua_ls.setup(lua_opts)
         end,
         gopls = function()
-            require('lspconfig').gopls.setup({
+            require("lspconfig").gopls.setup({
                 settings = {
                     gopls = {
-                        gofumpt = true
-                    }
-                }
+                        gofumpt = true,
+                    },
+                },
             })
         end,
         ltex = function()
-            require('lspconfig').ltex.setup({
+            require("lspconfig").ltex.setup({
                 settings = {
                     ltex = {
-                        language = "en-GB"
-                    }
-                }
+                        language = "en-GB",
+                    },
+                },
             })
         end,
         emmet_language_server = function()
-            require('lspconfig').emmet_language_server.setup({
-                filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact", "vue" },
+            require("lspconfig").emmet_language_server.setup({
+                filetypes = {
+                    "css",
+                    "eruby",
+                    "html",
+                    "javascript",
+                    "javascriptreact",
+                    "less",
+                    "sass",
+                    "scss",
+                    "pug",
+                    "typescriptreact",
+                    "vue",
+                },
             })
         end,
-    }
+    },
 })
 
-local cmp = require('cmp')
+local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
 cmp.setup({
     sources = {
-        { name = 'path' },
-        { name = 'nvim_lsp' },
-        { name = 'nvim_lua' },
-        { name = 'luasnip', keyword_length = 2 },
-        { name = 'buffer',  keyword_length = 3 },
+        { name = "path" },
+        { name = "nvim_lsp" },
+        { name = "nvim_lua" },
+        { name = "luasnip", keyword_length = 2 },
+        { name = "buffer", keyword_length = 3 },
+        { name = "codeium" },
     },
     formatting = {
-        fields = { 'abbr', 'kind', 'menu' },
-        format = require('lspkind').cmp_format({
-            mode = 'symbol',           -- show only symbol annotations
-            maxwidth = 50,             -- prevent the popup from showing more than provided characters
-            ellipsis_char = '...',     -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
-            symbol_map = { Codeium = "", }
-        })
+        fields = { "abbr", "kind", "menu" },
+        format = require("lspkind").cmp_format({
+            mode = "symbol", -- show only symbol annotations
+            maxwidth = 50, -- prevent the popup from showing more than provided characters
+            ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
+            symbol_map = { Codeium = "" },
+        }),
     },
     mapping = cmp.mapping.preset.insert({
-        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-        ['<C-Space>'] = cmp.mapping.complete(),
+        ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+        ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+        ["<C-Space>"] = cmp.mapping.complete(),
         ["<Tab>"] = cmp.mapping(function(fallback)
             -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
             if cmp.visible() then
@@ -104,4 +117,4 @@ null_ls.setup({
     },
 })
 
-vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.format()]])
