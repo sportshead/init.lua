@@ -21,12 +21,14 @@ return require("packer").startup(function(use)
         "stevearc/oil.nvim",
         config = function()
             require("oil").setup({
-                is_hidden_file = function(name)
-                    if name == ".git" then return true end
-                    if name == "node_modules" then return true end
+                view_options = {
+                    is_hidden_file = function(name)
+                        if name == ".git" then return true end
+                        if name == "node_modules" then return true end
 
-                    return false
-                end,
+                        return false
+                    end,
+                },
             })
         end,
     })
@@ -101,7 +103,7 @@ return require("packer").startup(function(use)
         "nvim-lualine/lualine.nvim",
         requires = { "nvim-tree/nvim-web-devicons" },
     })
-    use("arkav/lualine-lsp-progress")
+    use("WhoIsSethDaniel/lualine-lsp-progress")
 
     use({
         "ThePrimeagen/refactoring.nvim",
@@ -155,6 +157,6 @@ return require("packer").startup(function(use)
 
     use({
         "diogo464/kubernetes.nvim",
-        setup = function() require("kubernetes").setup() end,
+        config = function() require("kubernetes").setup() end,
     })
 end)
