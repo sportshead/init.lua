@@ -152,4 +152,9 @@ return require("packer").startup(function(use)
     })
 
     use("aznhe21/actions-preview.nvim")
+
+    use({
+        "diogo464/kubernetes.nvim",
+        setup = function() require("kubernetes").setup() end,
+    })
 end)

@@ -19,7 +19,7 @@ end)
 
 require("mason").setup({})
 require("mason-lspconfig").setup({
-    ensure_installed = { "tsserver", "gopls", "lua_ls", "ltex", "emmet_language_server" },
+    ensure_installed = { "tsserver", "gopls", "lua_ls", "ltex", "emmet_language_server", "yamlls" },
     handlers = {
         lsp_zero.default_setup,
         lua_ls = function()
@@ -58,6 +58,15 @@ require("mason-lspconfig").setup({
                     "pug",
                     "typescriptreact",
                     "vue",
+                },
+            })
+        end,
+        yamlls = function()
+            require("lspconfig").yamlls.setup({
+                yaml = {
+                    schemas = {
+                        [require("kubernetes").yamlls_schema()] = "*.yaml",
+                    },
                 },
             })
         end,
