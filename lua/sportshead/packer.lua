@@ -147,4 +147,6 @@ return require("packer").startup(function(use)
         end,
         ft = { "markdown" },
     })
+
+    use("aznhe21/actions-preview.nvim")
 end)
