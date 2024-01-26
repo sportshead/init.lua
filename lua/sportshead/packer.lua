@@ -39,6 +39,7 @@ return require("packer").startup(function(use)
             require("tokyonight").setup({
                 style = "moon",
                 transparent = true,
+                on_colors = function(colors) colors.fg_gutter = "#5C6594" end,
             })
             vim.cmd([[colorscheme tokyonight-moon]])
         end,
@@ -114,7 +115,7 @@ return require("packer").startup(function(use)
     })
 
     use({
-        "Exafunction/codeium.vim",
+        "Exafunction/codeium.nvim",
         requires = {
             { "nvim-lua/plenary.nvim" },
             { "hrsh7th/nvim-cmp" },
