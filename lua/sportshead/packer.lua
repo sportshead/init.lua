@@ -114,13 +114,7 @@ return require("packer").startup(function(use)
         },
     })
 
-    use({
-        "Exafunction/codeium.nvim",
-        requires = {
-            { "nvim-lua/plenary.nvim" },
-            { "hrsh7th/nvim-cmp" },
-        },
-    })
+    use("Exafunction/codeium.vim")
 
     use({
         "andweeb/presence.nvim",
