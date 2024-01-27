@@ -64,15 +64,6 @@ require("mason-lspconfig").setup({
                 },
             })
         end,
-        yamlls = function()
-            require("lspconfig").yamlls.setup({
-                yaml = {
-                    schemas = {
-                        [require("kubernetes").yamlls_schema()] = "*.yaml",
-                    },
-                },
-            })
-        end,
     },
 })
 

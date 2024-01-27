@@ -152,6 +152,7 @@ return require("packer").startup(function(use)
 
     use({
         "diogo464/kubernetes.nvim",
+        opt = true,
         config = function() require("kubernetes").setup() end,
     })
 end)
