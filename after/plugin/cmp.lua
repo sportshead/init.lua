@@ -1,5 +1,6 @@
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local luasnip = require("luasnip")
 
 cmp.setup({
     sources = {
@@ -31,6 +32,8 @@ cmp.setup({
                 else
                     cmp.confirm()
                 end
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
             else
                 fallback()
             end

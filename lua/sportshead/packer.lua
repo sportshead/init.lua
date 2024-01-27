@@ -86,6 +86,19 @@ return require("packer").startup(function(use)
         },
     })
 
+    use({
+        "L3MON4D3/cmp-luasnip-choice",
+        requires = {
+            { "hrsh7th/nvim-cmp" },
+            { "L3MON4D3/LuaSnip" },
+        },
+        config = function()
+            require("cmp_luasnip_choice").setup({
+                auto_open = true, -- Automatically open nvim-cmp on choice node (default: true)
+            })
+        end,
+    })
+
     use("tpope/vim-commentary")
 
     use({
