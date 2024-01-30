@@ -168,4 +168,8 @@ return require("packer").startup(function(use)
         opt = true,
         config = function() require("kubernetes").setup() end,
     })
+
+    use("wakatime/vim-wakatime")
+
+    use("tpope/vim-fugitive")
 end)
