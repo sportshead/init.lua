@@ -172,4 +172,19 @@ return require("packer").startup(function(use)
     use("wakatime/vim-wakatime")
 
     use("tpope/vim-fugitive")
+
+    use({
+        "sportshead/carbon-now.nvim",
+        config = function()
+            math.randomseed(os.time())
+            require("carbon-now").setup({
+                open_cmd = "open",
+                options = {
+                    theme = "panda-syntax",
+                    bg = function() return "hsl(" .. math.random(0, 360) .. ", 70%, 72%)" end,
+                    line_numbers = true,
+                },
+            })
+        end,
+    })
 end)
