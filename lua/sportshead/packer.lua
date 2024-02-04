@@ -136,6 +136,7 @@ return require("packer").startup(function(use)
                 buttons = true,
             })
         end,
+        run = "git apply ~/.config/nvim/patches/presence.nvim.patch",
     })
 
     use({
