@@ -12,3 +12,21 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "LazyUpdatePre",
+    callback = function()
+        local config_dir = vim.fn.stdpath("config")
+        local patches_dir = config_dir .. "/patches"
+
+        for _, patch_file in ipairs(vim.fn.readdir(patches_dir)) do
+            local plugin = patch_file:match("^(.+)%.patch$")
+            if not plugin then
+                print("Invalid patch file name: " .. patch_file)
+            else
+                local plugin_dir = vim.fn.stdpath("data") .. "/lazy/" .. plugin
+                vim.cmd(string.format("silent !git -C %s apply -R %s", plugin_dir, patches_dir .. "/" .. patch_file))
+            end
+        end
+    end,
+})
