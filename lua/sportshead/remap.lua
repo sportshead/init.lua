@@ -25,3 +25,8 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader><leader>", vim.cmd.so)
+
+-- map <leader>f<num> to <F<num>>, e.g. <leader>f1 -> <F1>
+for i = 1, 9 do
+    vim.keymap.set("n", string.format("<leader>f%d", i), string.format("<F%d>", i), { remap = true })
+end
