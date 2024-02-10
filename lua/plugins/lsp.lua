@@ -91,7 +91,6 @@ return {
                     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
                         if cmp.visible() then
                             local entry = cmp.get_selected_entry()
                             if not entry then
@@ -102,6 +101,11 @@ return {
                         elseif luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
                         else
+                            local codeium = vim.fn["codeium#Accept"]()
+                            if codeium ~= "" and type(codeium) == "string" then
+                                vim.api.nvim_feedkeys(codeium, "i", true)
+                            end
+
                             fallback()
                         end
                     end, { "i", "s" }),
