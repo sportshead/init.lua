@@ -3,15 +3,20 @@ return {
         "nvim-telescope/telescope.nvim",
         version = "0.1.5",
         dependencies = { "nvim-lua/plenary.nvim" },
-        keys = { "<leader>pf", "<leader>pg", "<leader>.", "<leader>pb", "<leader>pp" },
+        keys = { "<leader>pf", "<leader>pg", "<leader>.", "<leader>pb", "<leader>pp", "<leader>pr" },
         config = function()
             require("telescope").setup({
+                defaults = {
+                    mappings = {
+                        i = { ["<c-enter>"] = "to_fuzzy_refine" },
+                    },
+                },
                 extensions = {
                     fzf = {
-                        fuzzy = true, -- false will only do exact matching
+                        fuzzy = true,                   -- false will only do exact matching
                         override_generic_sorter = true, -- override the generic sorter
-                        override_file_sorter = true, -- override the file sorter
-                        case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+                        override_file_sorter = true,    -- override the file sorter
+                        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
                         -- the default case_mode is "smart_case"
                     },
                 },
@@ -44,10 +49,12 @@ return {
             vim.keymap.set("n", "<leader>.", function() builtin.find_files({ cwd = vim.fn.expand("%:p:h") }) end)
             vim.keymap.set("n", "<leader>pb", builtin.buffers, {})
             vim.keymap.set("n", "<leader>pp", builtin.git_files, {})
+            vim.keymap.set("n", "<leader>pr", builtin.resume, {})
         end,
     },
     {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+        build =
+        "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
     },
 }
