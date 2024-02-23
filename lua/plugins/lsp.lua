@@ -89,7 +89,13 @@ return {
                     ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
                     ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
                     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-                    ["<C-Space>"] = cmp.mapping.complete(),
+                    ["<C-Space>"] = cmp.mapping(function()
+                        if cmp.visible() then
+                            cmp.cancel()
+                        else
+                            cmp.complete()
+                        end
+                    end),
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             local entry = cmp.get_selected_entry()
