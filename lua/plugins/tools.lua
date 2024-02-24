@@ -7,23 +7,6 @@ return {
         } },
     },
     {
-        "JoosepAlviste/nvim-ts-context-commentstring",
-        opts = {
-            enable_autocmd = false,
-        },
-        lazy = true,
-    },
-    {
-        "numToStr/Comment.nvim",
-        dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-        config = function()
-            require("Comment").setup({
-                pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-            })
-        end,
-        event = { "BufReadPost", "BufNewFile" },
-    },
-    {
         "ThePrimeagen/refactoring.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -45,51 +28,12 @@ return {
         config = true,
     },
     {
-        "Exafunction/codeium.vim",
-        event = { "BufReadPost", "BufNewFile" },
-        config = function()
-            vim.g.codeium_no_map_tab = 1
-            vim.g.codeium_tab_fallback = ""
-        end,
-    },
-    {
-        "norcalli/nvim-colorizer.lua",
-        config = true,
-        event = { "BufReadPost", "BufNewFile" },
-    },
-    {
         "ThePrimeagen/vim-be-good",
         cmd = "VimBeGood",
     },
     {
         "tpope/vim-fugitive",
         cmd = { "G", "Git" },
-    },
-    {
-        "sportshead/carbon-now.nvim",
-        cmd = "CarbonNow",
-        config = function()
-            math.randomseed(os.time())
-            require("carbon-now").setup({
-                open_cmd = "open",
-                options = {
-                    theme = "panda-syntax",
-                    bg = function() return "hsl(" .. math.random(0, 360) .. ", 70%, 72%)" end,
-                    line_numbers = true,
-                },
-            })
-        end,
-    },
-    {
-        "aznhe21/actions-preview.nvim",
-        keys = {
-            { "gf", function() require("actions-preview").code_actions() end, mode = { "v", "n" } },
-        },
-    },
-    {
-        "folke/todo-comments.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        opts = { signs = false },
     },
     {
         "chrishrb/gx.nvim",
@@ -116,9 +60,5 @@ return {
                 search_engine = "duckduckgo",
             },
         },
-    },
-    {
-        "rcarriga/nvim-notify",
-        config = function() vim.notify = require("notify") end,
     },
 }
