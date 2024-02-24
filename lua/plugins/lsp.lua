@@ -75,13 +75,13 @@ return {
                     { name = "nvim_lsp" },
                     { name = "nvim_lua" },
                     { name = "luasnip", keyword_length = 2 },
-                    { name = "buffer",  keyword_length = 3 },
+                    { name = "buffer", keyword_length = 3 },
                 },
                 formatting = {
                     fields = { "abbr", "kind", "menu" },
                     format = require("lspkind").cmp_format({
-                        mode = "symbol",       -- show only symbol annotations
-                        maxwidth = 50,         -- prevent the popup from showing more than provided characters
+                        mode = "symbol", -- show only symbol annotations
+                        maxwidth = 50, -- prevent the popup from showing more than provided characters
                         ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead
                     }),
                 },
@@ -189,7 +189,16 @@ return {
                 },
             })
 
-            vim.cmd([[autocmd BufWritePre * lua vim.lsp.buf.format()]])
+            local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+            vim.api.nvim_clear_autocmds({ group = augroup })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                group = augroup,
+                callback = function()
+                    vim.lsp.buf.format({
+                        filter = function(client) return client.name ~= "lua_ls" and client.name ~= "tsserver" end,
+                    })
+                end,
+            })
         end,
     },
     {
