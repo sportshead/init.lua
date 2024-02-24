@@ -140,7 +140,15 @@ return {
             end)
 
             require("mason-lspconfig").setup({
-                ensure_installed = { "tsserver", "gopls", "lua_ls", "ltex", "emmet_language_server", "yamlls" },
+                ensure_installed = {
+                    "tsserver",
+                    "gopls",
+                    "lua_ls",
+                    "ltex",
+                    "emmet_language_server",
+                    "yamlls",
+                    "bashls",
+                },
                 handlers = {
                     lsp_zero.default_setup,
                     lua_ls = function()
@@ -210,8 +218,6 @@ return {
             null_ls.setup({
                 sources = {
                     null_ls.builtins.formatting.stylua,
-                    null_ls.builtins.code_actions.shellcheck,
-                    null_ls.builtins.diagnostics.shellcheck,
                     null_ls.builtins.formatting.prettierd,
                 },
             })
