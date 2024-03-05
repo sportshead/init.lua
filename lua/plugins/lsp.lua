@@ -223,11 +223,9 @@ return {
             })
         end,
     },
-
     {
-        "olrtg/nvim-emmet",
-        keys = {
-            { "<leader>xe", function() require("nvim-emmet").wrap_with_abbreviation() end, mode = { "n", "v" } },
-        },
+        "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        opts = {},
     },
 }
