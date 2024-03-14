@@ -13,20 +13,36 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins")
 
-vim.api.nvim_create_autocmd("User", {
-    pattern = "LazyUpdatePre",
-    callback = function()
+local function patch(git_string)
+    git_string = git_string or "silent !git -C %s apply %s"
+
+    return function()
         local config_dir = vim.fn.stdpath("config")
         local patches_dir = config_dir .. "/patches"
 
         for _, patch_file in ipairs(vim.fn.readdir(patches_dir)) do
             local plugin = patch_file:match("^(.+)%.patch$")
             if not plugin then
-                print("Invalid patch file name: " .. patch_file)
+                vim.notify("Invalid patch file name: " .. patch_file, vim.log.levels.ERROR, { title = "Patcher" })
             else
                 local plugin_dir = vim.fn.stdpath("data") .. "/lazy/" .. plugin
-                vim.cmd(string.format("silent !git -C %s apply -R %s", plugin_dir, patches_dir .. "/" .. patch_file))
+                vim.cmd(string.format(git_string, plugin_dir, patches_dir .. "/" .. patch_file))
             end
         end
-    end,
+    end
+end
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "LazyUpdatePre",
+    callback = patch("silent !git -C %s apply -R %s"),
+})
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "LazyInstall",
+    callback = patch(),
+})
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "LazyUpdate",
+    callback = patch(),
 })
