@@ -91,7 +91,7 @@ return {
                     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
                     ["<C-Space>"] = cmp.mapping(function()
                         if cmp.visible() then
-                            cmp.cancel()
+                            cmp.close()
                         else
                             cmp.complete()
                         end
