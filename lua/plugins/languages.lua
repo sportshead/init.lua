@@ -19,4 +19,7 @@ return {
         config = true,
         dependencies = { "nvim-treesitter/nvim-treesitter" },
     },
+    {
+        "petRUShka/vim-opencl",
+    },
 }
