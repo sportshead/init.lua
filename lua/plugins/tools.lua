@@ -67,4 +67,12 @@ return {
             { "<leader>xe", function() require("nvim-emmet").wrap_with_abbreviation() end, mode = { "n", "v" } },
         },
     },
+    {
+        "zeioth/garbage-day.nvim",
+        dependencies = "neovim/nvim-lspconfig",
+        event = "VeryLazy",
+        opts = {
+            notifications = true,
+        },
+    },
 }

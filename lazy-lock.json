@@ -11,6 +11,7 @@
   "cmp_luasnip": { "branch": "master", "commit": "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
   "codeium.vim": { "branch": "main", "commit": "82f2ba0f4bee19368102e59ecbf4ea585b3e89f7" },
   "friendly-snippets": { "branch": "main", "commit": "dcd4a586439a1c81357d5b9d26319ae218cc9479" },
+  "garbage-day.nvim": { "branch": "main", "commit": "29d6abeed654bf142e0f5e741e1968b16f59357a" },
   "harpoon": { "branch": "harpoon2", "commit": "a38be6e0dd4c6db66997deab71fc4453ace97f9c" },
   "kubernetes.nvim": { "branch": "main", "commit": "2cc98bc6981753ae15f2284fe63b20a3fcf8fc5a" },
   "lazy.nvim": { "branch": "main", "commit": "08954f723bf2d442ea020551e3acc956f4dc6dc7" },
