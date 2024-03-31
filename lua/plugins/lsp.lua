@@ -191,6 +191,7 @@ return {
                                 "pug",
                                 "typescriptreact",
                                 "vue",
+                                "astro",
                             },
                         })
                     end,
