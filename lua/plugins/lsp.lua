@@ -204,7 +204,11 @@ return {
                 group = augroup,
                 callback = function()
                     vim.lsp.buf.format({
-                        filter = function(client) return client.name ~= "lua_ls" and client.name ~= "tsserver" end,
+                        filter = function(client)
+                            return client.name ~= "lua_ls"
+                                and client.name ~= "tsserver"
+                                and client.name ~= "typescript-tools"
+                        end,
                     })
                 end,
             })
