@@ -192,6 +192,7 @@ return {
                                 "typescriptreact",
                                 "vue",
                                 "astro",
+                                "mdx",
                             },
                         })
                     end,
