@@ -17,7 +17,7 @@ return {
 {}
 </style>]],
             { i(1), i(2), i(3) },
-            { condition = line_begin }
-        )
+        ),
+        { condition = line_begin }
     ),
 }
