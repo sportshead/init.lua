@@ -22,4 +22,11 @@ return {
     {
         "petRUShka/vim-opencl",
     },
+    {
+        "sportshead/cie.nvim",
+        -- dir = "~/projects/cie/cie.nvim",
+        config = true,
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        lazy = false,
+    },
 }
