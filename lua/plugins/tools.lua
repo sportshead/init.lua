@@ -37,7 +37,6 @@ return {
     },
     {
         "chrishrb/gx.nvim",
-        dev = true,
         keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
         cmd = { "Browse" },
         init = function()
@@ -58,6 +57,7 @@ return {
             },
             handler_options = {
                 search_engine = "duckduckgo",
+                git_remotes = { "upstream", "origin" },
             },
         },
     },
