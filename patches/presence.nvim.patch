@@ -13,7 +13,7 @@ index 050d8e7..242615d 100644
 +    ["oil"] = "Oil",
  }
 diff --git a/lua/presence/init.lua b/lua/presence/init.lua
-index 1d2aefe..c6ad788 100644
+index 1d2aefe..b9a0fb7 100644
 --- a/lua/presence/init.lua
 +++ b/lua/presence/init.lua
 @@ -430,7 +430,7 @@ function Presence:get_project_name(file_path)
@@ -25,3 +25,14 @@ index 1d2aefe..c6ad788 100644
          self.log:info("Not a git repository, skipping...")
          return nil
      end
+@@ -756,6 +756,10 @@ function Presence:get_buttons(buffer, parent_dirpath)
+             repo_url = string.format("https://%s", relative)
+         end
+ 
++        if repo_url:match("^https://github%.com/.+/dotfiles%.git$") and not parent_dirpath:match("/%.bash%.d") then
++            return nil
++        end
++
+         self.log:debug(string.format("Adding button with repository URL: %s", repo_url))
+ 
+         return {
