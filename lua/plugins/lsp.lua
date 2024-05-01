@@ -1,25 +1,5 @@
 return {
     {
-        "VonHeikemen/lsp-zero.nvim",
-        branch = "v3.x",
-        dependencies = {
-            -- LSP Support
-            "neovim/nvim-lspconfig",
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-
-            -- Autocompletion
-            "hrsh7th/nvim-cmp",
-
-            -- Snippets
-            "L3MON4D3/LuaSnip",
-            "rafamadriz/friendly-snippets",
-
-            -- Formatting
-            "nvimtools/none-ls.nvim",
-        },
-    },
-    {
         "L3MON4D3/cmp-luasnip-choice",
         dependencies = {
             "hrsh7th/nvim-cmp",
@@ -29,18 +9,6 @@ return {
             auto_open = true, -- Automatically open nvim-cmp on choice node (default: true)
         },
         event = "InsertEnter",
-    },
-
-    {
-        "VonHeikemen/lsp-zero.nvim",
-        branch = "v3.x",
-        lazy = true,
-        config = false,
-        init = function()
-            -- Disable automatic setup, we are doing it manually
-            vim.g.lsp_zero_extend_cmp = 0
-            vim.g.lsp_zero_extend_lspconfig = 0
-        end,
     },
     {
         "williamboman/mason.nvim",
@@ -62,9 +30,6 @@ return {
             "L3MON4D3/cmp-luasnip-choice",
         },
         config = function()
-            local lsp_zero = require("lsp-zero")
-            lsp_zero.extend_cmp()
-
             local cmp = require("cmp")
             local cmp_select = { behavior = cmp.SelectBehavior.Select }
             local luasnip = require("luasnip")
@@ -128,16 +93,56 @@ return {
             { "williamboman/mason-lspconfig.nvim" },
         },
         config = function()
-            local lsp_zero = require("lsp-zero")
-            lsp_zero.extend_lspconfig()
+            local function format_callback()
+                vim.lsp.buf.format({
+                    filter = function(client)
+                        return client.name ~= "lua_ls"
+                            and client.name ~= "tsserver"
+                            and client.name ~= "typescript-tools"
+                    end,
+                })
+            end
+            local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+            vim.api.nvim_clear_autocmds({ group = augroup })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                group = augroup,
+                callback = format_callback,
+            })
 
-            lsp_zero.on_attach(function(_, bufnr)
-                local opts = { buffer = bufnr, remap = false }
-                -- see :help lsp-zero-keybindings
-                -- to learn the available actions
-                lsp_zero.default_keymaps({ buffer = bufnr })
-                vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-            end)
+            -- https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html
+            vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>")
+            vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
+            vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
+
+            vim.api.nvim_create_autocmd("LspAttach", {
+                desc = "LSP actions",
+                callback = function(event)
+                    local opts = { buffer = event.buf }
+
+                    -- these will be buffer-local keybindings
+                    -- because they only work if you have an active language server
+
+                    vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
+                    vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
+                    vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
+                    vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
+                    vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
+                    vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
+                    vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
+                    vim.keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
+                    vim.keymap.set({ "n", "x" }, "<F3>", format_callback, opts)
+                    vim.keymap.set("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+                    vim.keymap.set("i", "<C-h>", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
+                end,
+            })
+
+            local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+            local default_setup = function(server)
+                if server == "tsserver" then return end
+                require("lspconfig")[server].setup({
+                    capabilities = lsp_capabilities,
+                })
+            end
 
             require("mason-lspconfig").setup({
                 ensure_installed = {
@@ -150,13 +155,30 @@ return {
                     "bashls",
                 },
                 handlers = {
-                    lsp_zero.default_setup,
+                    default_setup,
                     lua_ls = function()
-                        local lua_opts = lsp_zero.nvim_lua_ls()
-                        require("lspconfig").lua_ls.setup(lua_opts)
+                        require("lspconfig").lua_ls.setup({
+                            capabilities = lsp_capabilities,
+                            settings = {
+                                Lua = {
+                                    runtime = {
+                                        version = "LuaJIT",
+                                    },
+                                    diagnostics = {
+                                        globals = { "vim" },
+                                    },
+                                    workspace = {
+                                        library = {
+                                            vim.env.VIMRUNTIME,
+                                        },
+                                    },
+                                },
+                            },
+                        })
                     end,
                     gopls = function()
                         require("lspconfig").gopls.setup({
+                            capabilities = lsp_capabilities,
                             settings = {
                                 gopls = {
                                     gofumpt = true,
@@ -167,6 +189,7 @@ return {
                     end,
                     ltex = function()
                         require("lspconfig").ltex.setup({
+                            capabilities = lsp_capabilities,
                             settings = {
                                 ltex = {
                                     language = "en-GB",
@@ -179,6 +202,7 @@ return {
                     end,
                     emmet_language_server = function()
                         require("lspconfig").emmet_language_server.setup({
+                            capabilities = lsp_capabilities,
                             filetypes = {
                                 "css",
                                 "eruby",
@@ -197,21 +221,6 @@ return {
                         })
                     end,
                 },
-            })
-
-            local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-            vim.api.nvim_clear_autocmds({ group = augroup })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                group = augroup,
-                callback = function()
-                    vim.lsp.buf.format({
-                        filter = function(client)
-                            return client.name ~= "lua_ls"
-                                and client.name ~= "tsserver"
-                                and client.name ~= "typescript-tools"
-                        end,
-                    })
-                end,
             })
         end,
     },
