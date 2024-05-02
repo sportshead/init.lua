@@ -147,6 +147,7 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "tsserver",
+                    "volar",
                     "gopls",
                     "lua_ls",
                     "ltex",
@@ -218,6 +219,11 @@ return {
                                 "astro",
                                 "mdx",
                             },
+                        })
+                    end,
+                    volar = function()
+                        require("lspconfig").volar.setup({
+                            capabilities = lsp_capabilities,
                         })
                     end,
                 },

@@ -1,0 +1,19 @@
+diff --git a/lua/typescript-tools/process.lua b/lua/typescript-tools/process.lua
+index a1dd48f..ce46931 100644
+--- a/lua/typescript-tools/process.lua
++++ b/lua/typescript-tools/process.lua
+@@ -53,10 +53,13 @@ function Process.new(type, on_response, on_exit)
+   self.on_exit = on_exit
+ 
+   local plugins_path = tsserver_provider:get_plugins_path()
++  local vue_typescript_plugin = require("mason-registry")
++    .get_package("vue-language-server")
++    :get_install_path() .. "/node_modules/@vue/language-server" .. "/node_modules/@vue/typescript-plugin"
+ 
+   if plugins_path and #plugin_config.tsserver_plugins > 0 then
+     table.insert(self.args, "--pluginProbeLocations")
+-    table.insert(self.args, plugins_path:absolute())
++    table.insert(self.args, plugins_path:absolute() .. "," .. vue_typescript_plugin)
+     table.insert(self.args, "--globalPlugins")
+     table.insert(self.args, table.concat(plugin_config.tsserver_plugins, ","))
+   end
