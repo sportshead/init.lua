@@ -21,13 +21,13 @@ return {
         dependencies = {
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
-            "saadparwaiz1/cmp_luasnip",
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-nvim-lua",
             "onsails/lspkind.nvim",
 
             "L3MON4D3/LuaSnip",
             "L3MON4D3/cmp-luasnip-choice",
+            "saadparwaiz1/cmp_luasnip",
         },
         config = function()
             local cmp = require("cmp")
@@ -35,6 +35,9 @@ return {
             local luasnip = require("luasnip")
 
             cmp.setup({
+                snippet = {
+                    expand = function(args) require("luasnip").lsp_expand(args.body) end,
+                },
                 sources = {
                     { name = "path" },
                     { name = "nvim_lsp" },
@@ -95,11 +98,7 @@ return {
         config = function()
             local function format_callback()
                 vim.lsp.buf.format({
-                    filter = function(client)
-                        return client.name ~= "lua_ls"
-                            and client.name ~= "tsserver"
-                            and client.name ~= "typescript-tools"
-                    end,
+                    filter = function(client) return client.name ~= "lua_ls" and client.name ~= "vtsls" end,
                 })
             end
             local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -146,7 +145,7 @@ return {
 
             require("mason-lspconfig").setup({
                 ensure_installed = {
-                    "tsserver",
+                    "vtsls",
                     "volar",
                     "gopls",
                     "lua_ls",
@@ -221,9 +220,23 @@ return {
                             },
                         })
                     end,
+                    vtsls = function()
+                        require("lspconfig").vtsls.setup({
+                            capabilities = lsp_capabilities,
+                        })
+                    end,
                     volar = function()
                         require("lspconfig").volar.setup({
                             capabilities = lsp_capabilities,
+                            filetypes = { "vue", "javascript", "typescript" },
+                            init_options = {
+                                vue = {
+                                    hybridMode = false,
+                                },
+                                typescript = {
+                                    tsdk = vim.fn.getcwd() .. "node_modules/typescript/lib",
+                                },
+                            },
                         })
                     end,
                 },

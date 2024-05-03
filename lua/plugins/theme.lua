@@ -1,7 +1,6 @@
 return {
     {
         "folke/tokyonight.nvim",
-        enabled = false,
         lazy = false,
         priority = 1000,
         opts = {
@@ -16,6 +15,7 @@ return {
     },
     {
         "scottmckendry/cyberdream.nvim",
+        enabled = false,
         lazy = false,
         priority = 1000,
         opts = {
