@@ -228,7 +228,7 @@ return {
                     volar = function()
                         require("lspconfig").volar.setup({
                             capabilities = lsp_capabilities,
-                            filetypes = { "vue", "javascript", "typescript" },
+                            filetypes = { "vue" },
                             init_options = {
                                 vue = {
                                     hybridMode = false,
