@@ -97,8 +97,13 @@ return {
         },
         config = function()
             local function format_callback()
+                local dir = vim.fn.expand("%:p:h")
+                if dir:match("projects/ultraviolet") then return vim.cmd("EslintFixAll") end
                 vim.lsp.buf.format({
-                    filter = function(client) return client.name ~= "lua_ls" and client.name ~= "vtsls" end,
+                    filter = function(client)
+                        local lsp_blacklist = { "lua_ls", "vtsls", "eslint" }
+                        return not vim.tbl_contains(lsp_blacklist, client.name)
+                    end,
                 })
             end
             local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -153,6 +158,7 @@ return {
                     "emmet_language_server",
                     "yamlls",
                     "bashls",
+                    "eslint",
                 },
                 handlers = {
                     default_setup,
