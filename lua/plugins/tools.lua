@@ -36,6 +36,11 @@ return {
         cmd = { "G", "Git" },
     },
     {
+        "lewis6991/gitsigns.nvim",
+        config = true,
+        event = "VeryLazy",
+    },
+    {
         "chrishrb/gx.nvim",
         keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
         cmd = { "Browse" },
