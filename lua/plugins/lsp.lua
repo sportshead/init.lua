@@ -98,7 +98,7 @@ return {
         config = function()
             local function format_callback()
                 local dir = vim.fn.expand("%:p:h")
-                if dir:match("projects/ultraviolet") then return vim.cmd("EslintFixAll") end
+                if dir:match("projects/ultraviolet") then return vim.cmd("silent! EslintFixAll") end
                 vim.lsp.buf.format({
                     filter = function(client)
                         local lsp_blacklist = { "lua_ls", "vtsls", "eslint" }
