@@ -1,7 +1,10 @@
 return {
     {
         "nvim-lualine/lualine.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+            "linrongbin16/lsp-progress.nvim",
+        },
         config = function()
             -- https://github.com/ThePrimeagen/harpoon/blob/2cd4e03372f7ee5692c8caa220f479ea07970f17/lua/harpoon/list.lua#L7C1-L21C4
             local function index_of(items, element, config)
@@ -43,12 +46,12 @@ return {
                             newfile_status = true,
                             path = 1,
                         },
-                        {
-                            "lsp_progress",
-                            display_components = { "lsp_client_name", "spinner", { "title", "percentage", "message" } },
-                            timer = { spinner = 150, progress_enddelay = 500, lsp_client_name_enddelay = 1000 },
-                            spinner_symbols = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
-                        },
+                        function()
+                            return require("lsp-progress").progress({
+                                spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+                                spin_update_time = 150,
+                            })
+                        end,
                     },
                     lualine_x = { "encoding", "fileformat", "filetype" },
                     lualine_y = {
@@ -61,10 +64,17 @@ return {
                     lualine_z = { "progress", "location" },
                 },
             })
+
+            vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+            vim.api.nvim_create_autocmd("User", {
+                group = "lualine_augroup",
+                pattern = "LspProgressStatusUpdated",
+                callback = require("lualine").refresh,
+            })
         end,
     },
     {
-        "WhoIsSethDaniel/lualine-lsp-progress",
-        dependencies = { "nvim-lualine/lualine.nvim" },
+        "linrongbin16/lsp-progress.nvim",
+        config = true,
     },
 }
