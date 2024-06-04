@@ -103,7 +103,10 @@ return {
                     or dir:match("projects/vite%-plugin%-mediawiki%-userscript")
                     or dir:match("projects/mediawiki")
                 then
-                    return vim.cmd("silent! EslintFixAll")
+                    -- wtf callbacks get removed when they return true??
+                    -- neovim/neovim#17782
+                    vim.cmd("silent! EslintFixAll")
+                    return
                 end
                 vim.lsp.buf.format({
                     filter = function(client)
