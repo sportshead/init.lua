@@ -238,19 +238,42 @@ return {
                     vtsls = function()
                         require("lspconfig").vtsls.setup({
                             capabilities = lsp_capabilities,
+                            filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+                            -- https://github.com/yioneko/vtsls/issues/148#issuecomment-2094004455
+                            settings = {
+                                vtsls = {
+                                    tsserver = {
+                                        globalPlugins = {
+                                            {
+                                                name = "@vue/typescript-plugin",
+                                                location = require("mason-registry")
+                                                    .get_package("vue-language-server")
+                                                    :get_install_path()
+                                                    .. "/node_modules/@vue/language-server",
+                                                languages = { "vue" },
+                                                configNamespace = "typescript",
+                                                enableForWorkspaceTypeScriptVersions = true,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         })
                     end,
                     volar = function()
                         require("lspconfig").volar.setup({
                             capabilities = lsp_capabilities,
                             filetypes = { "vue" },
-                            init_options = {
-                                vue = {
-                                    hybridMode = false,
-                                },
-                                typescript = {
-                                    tsdk = vim.fn.getcwd() .. "node_modules/typescript/lib",
-                                },
+                        })
+                    end,
+                    eslint = function()
+                        require("lspconfig").eslint.setup({
+                            capabilities = lsp_capabilities,
+                            handlers = {
+                                ["eslint/noConfig"] = function()
+                                    vim.notify("No eslint config found", vim.log.levels.WARN)
+                                    return {}
+                                end,
                             },
                         })
                     end,
