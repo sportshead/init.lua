@@ -35,4 +35,9 @@ return {
             { "<leader>t", function() require("whitespace-nvim").trim() end },
         },
     },
+    {
+        "kylechui/nvim-surround",
+        event = "VeryLazy",
+        config = true,
+    },
 }
