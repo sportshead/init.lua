@@ -16,6 +16,20 @@ return {
     },
     {
         "stevearc/dressing.nvim",
-        config = "true",
+        config = true,
+    },
+    {
+        "andythigpen/nvim-coverage",
+        config = true,
+        cmd = {
+            "Coverage",
+            "CoverageLoad",
+            "CoverageLoadLcov",
+            "CoverageShow",
+            "CoverageHide",
+            "CoverageToggle",
+            "CoverageClear",
+            "CoverageSummary",
+        },
     },
 }
