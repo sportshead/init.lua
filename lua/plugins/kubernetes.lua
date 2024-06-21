@@ -5,7 +5,7 @@ return {
         dependencies = { "williamboman/mason-lspconfig.nvim" },
         config = function()
             if vim.loop.os_uname().sysname == "Darwin" then
-                vim.fn.system("orbctl status")
+                vim.fn.system("orbctl config show | grep -q 'k8s.enable: true'")
                 if vim.v.shell_error == 0 then
                     require("kubernetes").setup()
 
