@@ -163,7 +163,7 @@ return {
                     "volar",
                     "gopls",
                     "lua_ls",
-                    "ltex",
+                    "harper_ls",
                     "emmet_language_server",
                     "yamlls",
                     "bashls",
@@ -198,19 +198,6 @@ return {
                                 gopls = {
                                     gofumpt = true,
                                     staticcheck = true,
-                                },
-                            },
-                        })
-                    end,
-                    ltex = function()
-                        require("lspconfig").ltex.setup({
-                            capabilities = lsp_capabilities,
-                            settings = {
-                                ltex = {
-                                    language = "en-GB",
-                                    ["ltex-ls"] = {
-                                        logLevel = "config",
-                                    },
                                 },
                             },
                         })
