@@ -163,7 +163,7 @@ return {
                     "volar",
                     "gopls",
                     "lua_ls",
-                    "harper_ls",
+                    -- "harper_ls",
                     "emmet_language_server",
                     "yamlls",
                     "bashls",
@@ -261,6 +261,15 @@ return {
                                     vim.notify("No eslint config found", vim.log.levels.WARN)
                                     return {}
                                 end,
+                            },
+                        })
+                    end,
+                    clangd = function()
+                        require("lspconfig").clangd.setup({
+                            capabilities = lsp_capabilities,
+                            filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+                            settings = {
+                                arguments = { "--enable-config" },
                             },
                         })
                     end,

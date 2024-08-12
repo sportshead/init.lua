@@ -6,6 +6,7 @@ return {
                 is_hidden_file = function(name)
                     if name == ".git" then return true end
                     if name == "node_modules" then return true end
+                    if vim.endswith(name, ".o") then return true end
 
                     return false
                 end,
